@@ -6,6 +6,7 @@ import EventList from './components/EventList'
 import { createResource } from 'solid-js'
 import { load, loadRelaySelections, loadFollows } from "@welshman/app";
 import { getListTags, getPubkeyTagValues } from "@welshman/util";
+import ProfileInfo from './components/ProfileInfo'
 
 const App: Component = () => {
   const [state, actions] = useAppState();
@@ -31,6 +32,9 @@ const App: Component = () => {
           actions.addEvent(followerRelays.event);
         }
       }));
+
+      // TODO: FIXME DON'T RETURN EARLY
+      return true;
 
       // Subscribe to events
       await Promise.all([
