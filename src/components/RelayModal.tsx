@@ -16,10 +16,11 @@ interface RelayModalProps {
   isOpen: boolean;
   onClose: () => void;
   kind: number;
+  initialUrls?: string[];
+  onConfirm?: (relays: string[]) => void;
 }
 
 const RelayModal: Component<RelayModalProps> = (props) => {
-  const [state, actions] = useAppState();
   const [searchTerm, setSearchTerm] = createSignal("");
   const [selectedRelays, setSelectedRelays] = createSignal<Set<string>>(new Set());
   const [hasChanges, setHasChanges] = createSignal(false);
@@ -29,17 +30,10 @@ const RelayModal: Component<RelayModalProps> = (props) => {
     setSearchTerm("");
     setHasChanges(false);
     
-    const existingEvent = state.events.find(e => e.kind === props.kind);
-    if (existingEvent) {
-      try {
-        const content = JSON.parse(existingEvent.content);
-        const urls = Array.isArray(content) ? content.map(item => item.url || item) : [];
-        setSelectedRelays(new Set(urls));
-      } catch {
-        setSelectedRelays(new Set());
-      }
+    if (props.initialUrls) {
+      setSelectedRelays(new Set(props.initialUrls));
     } else {
-      setSelectedRelays(new Set());
+      setSelectedRelays(new Set<string>());
     }
   });
 
@@ -68,7 +62,7 @@ const RelayModal: Component<RelayModalProps> = (props) => {
 
   const handleConfirm = () => {
     const relayArray = Array.from(selectedRelays());
-    actions.updateEvent(props.kind, JSON.stringify(relayArray));
+    props.onConfirm?.(relayArray);
     props.onClose();
   };
 

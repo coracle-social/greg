@@ -2,7 +2,7 @@ import './App.css'
 import { Component, Show } from 'solid-js'
 import { useAppState } from './AppState'
 import LoginDialog from './components/LoginDialog'
-import EventCards from './components/EventCards'
+import EventList from './components/EventList'
 
 const App: Component = () => {
   const [state] = useAppState();
@@ -11,7 +11,7 @@ const App: Component = () => {
     <>
       <LoginDialog />
       <Show when={state.currentUserPubkey}>
-        <EventCards />
+        <EventList />
       </Show>
     </>
   )
