@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import { useAppState } from "../AppState";
 import { getNip07, Nip07Signer } from "@welshman/signer";
-import { loadInboxRelaySelections, load } from "@welshman/app";
+import { loadInboxRelaySelections, load, loadRelaySelections } from "@welshman/app";
 
 const LoginDialog: Component = () => {
   const [state, actions] = useAppState();
@@ -21,7 +21,7 @@ const LoginDialog: Component = () => {
       actions.setCurrentUserPubkey(pubkey);
       console.log('=======')
       // Load user's relay selections from purplepag.es
-      const relaySelections = await loadInboxRelaySelections(pubkey);
+      const relaySelections = await loadRelaySelections(pubkey);
       if (relaySelections) {
         actions.addEvent(relaySelections.event);
       }

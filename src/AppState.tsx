@@ -15,6 +15,7 @@ type AppStateActions = {
   setCurrentUserPubkey: (pubkey: string | undefined) => void;
   setSigner: (signer: ISigner | undefined) => void;
   addEvent: (event: TrustedEvent) => void;
+  updateEvent: (kind: number, content: string) => void;
 };
 
 // Create the context with a default value
@@ -32,6 +33,31 @@ export function AppStateProvider(props: { children: JSX.Element }) {
     setCurrentUserPubkey: (pubkey) => setState("currentUserPubkey", pubkey),
     setSigner: (signer) => setState("signer", signer),
     addEvent: (event) => setState("events", (events) => [...events, event]),
+    updateEvent: (kind: number, content: string) => {
+      setState("events", (events) => {
+        const existingEventIndex = events.findIndex(e => e.kind === kind);
+        if (existingEventIndex >= 0) {
+          // Replace existing event
+          return [
+            ...events.slice(0, existingEventIndex),
+            { ...events[existingEventIndex], content },
+            ...events.slice(existingEventIndex + 1)
+          ];
+        } else {
+          // Create new event
+          const newEvent: TrustedEvent = {
+            kind,
+            content,
+            created_at: Math.floor(Date.now() / 1000),
+            pubkey: state.currentUserPubkey || "",
+            id: "", // This would normally be set by the relay
+            sig: "", // This would normally be set by signing
+            tags: []
+          };
+          return [...events, newEvent];
+        }
+      });
+    }
   };
 
   return (
