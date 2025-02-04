@@ -9,6 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@welshman/app": "^0.0.42",
+    "@welshman/lib": "^0.0.39",
+    "@welshman/net": "^0.0.46",
+    "@welshman/signer": "^0.0.20",
+    "@welshman/util": "^0.0.60",
     "solid-js": "^1.9.3"
   },
   "devDependencies": {
