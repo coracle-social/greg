@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 import { useAppState } from "../AppState";
 import { getNip07, Nip07Signer } from "@welshman/signer";
-import { loadInboxRelaySelections, load, loadRelaySelections } from "@welshman/app";
 
 const LoginDialog: Component = () => {
   const [state, actions] = useAppState();
@@ -19,24 +18,6 @@ const LoginDialog: Component = () => {
       // Save both the signer and pubkey in state
       actions.setSigner(signer);
       actions.setCurrentUserPubkey(pubkey);
-      console.log('=======')
-      // Load user's relay selections from purplepag.es
-      const relaySelections = await loadRelaySelections(pubkey);
-      if (relaySelections) {
-        actions.addEvent(relaySelections.event);
-      }
-      console.log(relaySelections)
-      // Subscribe to user's events
-      load({
-        filters: [{
-          authors: [pubkey],
-          kinds: [10006, 10007, 10013, 10050, 30002],
-        }],
-        onEvent: (event) => {
-            console.log(event)
-            actions.addEvent(event);
-        }
-      });
     } catch (error) {
       console.error("Login failed:", error);
       // You might want to show an error message to the user here

@@ -1,8 +1,8 @@
 import { createContext, useContext, JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { ISigner } from "@welshman/signer";
-import type { TrustedEvent, HashedEvent } from "@welshman/util";
-import { Repository } from "@welshman/util";
+import type { TrustedEvent, HashedEvent, Repository } from "@welshman/util";
+import { repository } from "@welshman/app";
 
 // Define the shape of our state
 type AppState = {
@@ -27,7 +27,7 @@ export function AppStateProvider(props: { children: JSX.Element }) {
   const [state, setState] = createStore<AppState>({
     currentUserPubkey: undefined,
     signer: undefined,
-    repository: new Repository<TrustedEvent>(),
+    repository,
   });
 
   const actions: AppStateActions = {
